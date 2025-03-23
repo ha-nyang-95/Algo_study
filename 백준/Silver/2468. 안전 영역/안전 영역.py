@@ -1,3 +1,6 @@
+# import sys
+# sys.stdin=open('testcases/1/input.txt')
+
 from collections import deque
 
 def search(p):
@@ -30,6 +33,7 @@ def bfs(r, c, p):
 
 N = int(input())
 mountain = [list(map(int, input().split())) for _ in range(N)]
+# 비가 오지 않는 경우도 고려해야 한다.
 num = {0}
 for line in mountain:
     num.update(line)
@@ -37,6 +41,9 @@ for line in mountain:
 result = 0
 for i in num:
     test = [[1 for _ in range(N)] for _ in range(N)]
+    # 굳이 함수 두개를 작성해야 했을까?
+    # 여기서 i 이하인 높이들을 전부 0처리 하고 함수로 넘어갔다면
+    # 하나의 함수로 해결가능 할 거 같은데, 시간 차이도 별로 없어보임
     result = max(result, search(i))
 
 print(result)
