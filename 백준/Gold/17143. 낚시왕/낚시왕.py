@@ -17,9 +17,17 @@ for i in range(1, M + 1):
     else:
         Sea[r][c] = i
 
+# 헌터의 위치
 hunter_king = -1
+# 헌터가 잡은 상어의 총 크기
 hunting_shark = 0
 
+# 헌터가 오른쪽 끝에 도달할 때까지 반복
+# [상어가 사라지는 경우]
+# 1. 헌터가 잡는 경우
+# 2. 서로 잡아먹는 경우
+# shark 리스트에서 상어의 정보를 삭제해줘야하고,
+# Sea에서 상어를 삭제해줘야한다.
 while hunter_king != C - 1:
     hunter_king += 1
 
@@ -45,13 +53,13 @@ while hunter_king != C - 1:
 
         dr, dc = dir[d]
 
-        # ▶ 속도 최적화: 원형 반복을 피하기 위해 나머지 계산
+        # 속도 최적화: 원형 반복(방향도 일치한 상태로 원위치로 돌아오는 경우)을 피하기 위해 나머지 계산
         if d in [1, 2]:  # 상하
             s %= (R - 1) * 2
         else:  # 좌우
             s %= (C - 1) * 2
-
-        # ▶ 방향에 따라 이동 처리
+    
+        # 방향에 따라 이동 처리
         for _ in range(s):
             nr, nc = r + dr, c + dc
             if not (0 <= nr < R):
@@ -67,7 +75,7 @@ while hunter_king != C - 1:
         # 이동 후 좌표와 방향을 업데이트
         shark[i] = [r + 1, c + 1, s, d, z]
 
-        # ▶ 같은 위치에 상어가 있으면 크기 비교
+        # 같은 위치에 상어가 있으면 크기 비교
         if new_Sea[r][c]:
             exist_idx = new_Sea[r][c]
             if shark[exist_idx][4] > z:
@@ -79,6 +87,8 @@ while hunter_king != C - 1:
             new_Sea[r][c] = i
 
     # 새로운 Sea로 갱신
+    # 여기까지가 바다를 갱신하기 위해
+    # 헌터가 한칸 움직이고, 상어들이 움직인 현재 정보다.
     Sea = new_Sea
 
 print(hunting_shark)
