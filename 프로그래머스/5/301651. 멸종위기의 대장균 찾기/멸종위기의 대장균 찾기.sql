@@ -1,0 +1,26 @@
+# 재귀 쿼리 생성
+WITH RECURSIVE G AS(
+    SELECT ID, PARENT_ID, 1 AS GENERATION
+    FROM ECOLI_DATA
+    WHERE PARENT_ID IS NULL
+    
+    # ALL을 사용하면 위의 테이블과 겹치는 부분도 밑으로 추가할 수 있다.
+    UNION ALL
+    
+    SELECT C.ID,C.PARENT_ID, G.GENERATION + 1
+    FROM G
+    JOIN ECOLI_DATA C ON C.PARENT_ID = G.ID
+)
+
+SELECT COUNT(*) COUNT, GENERATION
+FROM G
+# 부모 아이디에 적힌 아이디는
+# 다시 말해 자식이 있는 아이디이기 때문에,
+# 테이블에서 제거해준다.
+WHERE ID NOT IN (
+    SELECT DISTINCT PARENT_ID
+    FROM G
+    WHERE PARENT_ID IS NOT NULL
+)
+GROUP BY GENERATION
+ORDER BY GENERATION ASC
